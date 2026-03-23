@@ -38,12 +38,12 @@ export default async function ContributePage() {
         </div>
         <blockquote className="mb-6 text-center sm:text-left" dir="rtl">
           <p className="font-quran text-xl leading-[1.9] text-[var(--dq-ink)] sm:text-2xl">
-            كِتَـٰبٌ أَنزَلْنَـٰهُ إِلَيْكَ مُبَـٰرَكٌ لِّيَدَّبَّرُوٓا۟ ءَايَـٰتِهِۦ
+            كِتَـٰبٌ أَنزَلْنَـٰهُ إِلَيْكَ مُبَـٰرَكٌۭ لِّيَدَّبَّرُوٓا۟ ءَايَـٰتِهِۦ وَلِيَتَذَكَّرَ أُو۟لُوا۟ ٱلْأَلْبَـٰبِ
           </p>
           <p className="font-display mt-2 text-sm font-medium italic text-[var(--dq-muted)]" dir="ltr">
-            &ldquo;A blessed Book We have revealed to you, that they might reflect upon its verses.&rdquo;
+            &ldquo;[This is] a blessed Book which We have revealed to you, [O Muhammad], that they might reflect upon its verses and that those of understanding would be reminded.&rdquo;
             <span className="ml-1 not-italic text-[var(--dq-gold-muted)]">
-              — 38:29
+              — 38:29, Sahih International
             </span>
           </p>
         </blockquote>

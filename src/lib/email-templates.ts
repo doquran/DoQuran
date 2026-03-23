@@ -94,8 +94,8 @@ export function buildDailyDigestHtml(data: DigestData): string {
 
   <!-- Quranic pull-quote -->
   <tr><td style="padding:28px 32px 0;text-align:center">
-    <p style="margin:0;font-size:20px;line-height:2;direction:rtl;color:#1a3a2a;font-family:'Traditional Arabic','Scheherazade New',serif">إِنَّ فِى خَلْقِ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ وَٱخْتِلَـٰفِ ٱلَّيْلِ وَٱلنَّهَارِ لَـَٔايَـٰتٍ لِّأُو۟لِى ٱلْأَلْبَـٰبِ</p>
-    <p style="margin:8px 0 0;font-size:13px;line-height:1.6;color:#8b7d5e;font-style:italic;font-family:Georgia,'Times New Roman',serif">&ldquo;Indeed, in the creation of the heavens and the earth and the alternation of the night and the day are signs for those of understanding.&rdquo; <span style="font-style:normal;color:#a89e8a">&mdash; 3:190</span></p>
+    <p style="margin:0;font-size:20px;line-height:2;direction:rtl;color:#1a3a2a;font-family:'Traditional Arabic','Scheherazade New',serif">إِنَّ فِى خَلْقِ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ وَٱخْتِلَـٰفِ ٱلَّيْلِ وَٱلنَّهَارِ لَءَايَـٰتٍۢ لِّأُو۟لِى ٱلْأَلْبَـٰبِ</p>
+    <p style="margin:8px 0 0;font-size:13px;line-height:1.6;color:#8b7d5e;font-style:italic;font-family:Georgia,'Times New Roman',serif">&ldquo;Indeed, in the creation of the heavens and the earth and the alternation of the night and the day are signs for those of understanding.&rdquo; <span style="font-style:normal;color:#a89e8a">&mdash; 3:190, Sahih International</span></p>
   </td></tr>
 
   <!-- Greeting -->

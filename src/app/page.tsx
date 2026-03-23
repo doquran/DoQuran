@@ -140,12 +140,12 @@ export default async function HomePage({ searchParams }: HomeProps) {
         </div>
         <blockquote className="mb-8" dir="rtl">
           <p className="font-quran text-[clamp(1.5rem,4vw,2.2rem)] leading-[2] text-[var(--dq-ink)]">
-            أَفَلَا يَتَدَبَّرُونَ ٱلْقُرْءَانَ
+            أَفَلَا يَتَدَبَّرُونَ ٱلْقُرْءَانَ أَمْ عَلَىٰ قُلُوبٍ أَقْفَالُهَآ
           </p>
           <p className="font-display mt-2 text-base font-medium italic tracking-wide text-[var(--dq-muted)]" dir="ltr">
-            &ldquo;Do they not reflect upon the Qur&apos;an?&rdquo;
+            &ldquo;Then do they not reflect upon the Qur&apos;an, or are there locks upon [their] hearts?&rdquo;
             <span className="ml-1 not-italic text-[var(--dq-gold-muted)]">
-              — 47:24
+              — 47:24, Sahih International
             </span>
           </p>
         </blockquote>

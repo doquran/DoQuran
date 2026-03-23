@@ -19,43 +19,43 @@ const sections: VerseSection[] = [
   {
     arabic: "أَفَلَا يَتَدَبَّرُونَ ٱلْقُرْءَانَ أَمْ عَلَىٰ قُلُوبٍ أَقْفَالُهَآ",
     english:
-      "Do they not reflect upon the Qur\u2019an, or are there locks upon their hearts?",
-    ref: "47:24",
+      "Then do they not reflect upon the Qur\u2019an, or are there locks upon [their] hearts?",
+    ref: "47:24, Sahih International",
     heading: "The invitation",
     body: "This is not a rhetorical flourish. It is a direct question from the Creator to every reader, in every century. The Qur\u2019an does not ask to be recited and shelved\u200a\u2014\u200ait asks to be engaged with, struggled with, understood. DoQuran exists because that question deserves a serious answer.",
   },
   {
     arabic:
-      "كِتَـٰبٌ أَنزَلْنَـٰهُ إِلَيْكَ مُبَـٰرَكٌ لِّيَدَّبَّرُوٓا۟ ءَايَـٰتِهِۦ وَلِيَتَذَكَّرَ أُو۟لُوا۟ ٱلْأَلْبَـٰبِ",
+      "كِتَـٰبٌ أَنزَلْنَـٰهُ إِلَيْكَ مُبَـٰرَكٌۭ لِّيَدَّبَّرُوٓا۟ ءَايَـٰتِهِۦ وَلِيَتَذَكَّرَ أُو۟لُوا۟ ٱلْأَلْبَـٰبِ",
     english:
-      "A blessed Book We have revealed to you, that they might reflect upon its verses and that those of understanding would be reminded.",
-    ref: "38:29",
+      "[This is] a blessed Book which We have revealed to you, [O Muhammad], that they might reflect upon its verses and that those of understanding would be reminded.",
+    ref: "38:29, Sahih International",
     heading: "The promise",
     body: "Reflection is not merely encouraged\u200a\u2014\u200ait is the stated purpose of revelation. The phrase \u201cthose of understanding\u201d (\u0623\u064f\u0648\u0644\u064f\u0648\u0627\u200c \u0627\u0644\u0623\u0644\u0628\u0627\u0628) appears sixteen times in the Qur\u2019an, each time connecting intellect with spiritual depth. If you are a thinker, the Qur\u2019an is speaking directly to you.",
   },
   {
-    arabic: "وَلَقَدْ يَسَّرْنَا ٱلْقُرْءَانَ لِلذِّكْرِ فَهَلْ مِن مُّدَّكِرٍ",
+    arabic: "وَلَقَدْ يَسَّرْنَا ٱلْقُرْءَانَ لِلذِّكْرِ فَهَلْ مِن مُّدَّكِرٍۢ",
     english:
       "And We have certainly made the Qur\u2019an easy for remembrance, so is there any who will remember?",
-    ref: "54:17",
+    ref: "54:17, Sahih International",
     heading: "The accessibility",
     body: "This verse appears four times in S\u016brat al-Qamar\u200a\u2014\u200afour times. Reflection on the Qur\u2019an is not reserved for seminary graduates or Arabic linguists. It is a door held open for everyone: the physicist pondering the cosmos, the teacher shaping young minds, the physician witnessing the body\u2019s design. Your background is not a barrier. It is a lens.",
   },
   {
     arabic:
-      "إِنَّ فِى خَلْقِ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ وَٱخْتِلَـٰفِ ٱلَّيْلِ وَٱلنَّهَارِ لَـَٔايَـٰتٍ لِّأُو۟لِى ٱلْأَلْبَـٰبِ",
+      "إِنَّ فِى خَلْقِ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ وَٱخْتِلَـٰفِ ٱلَّيْلِ وَٱلنَّهَارِ لَءَايَـٰتٍۢ لِّأُو۟لِى ٱلْأَلْبَـٰبِ",
     english:
       "Indeed, in the creation of the heavens and the earth and the alternation of the night and the day are signs for those of understanding.",
-    ref: "3:190",
+    ref: "3:190, Sahih International",
     heading: "The lenses",
     body: "The Qur\u2019an points to the natural world as evidence\u200a\u2014\u200athe stars, the seasons, the cycle of life. Who better to read these signs than those who study them for a living? A scientist\u2019s awe at molecular precision, an engineer\u2019s appreciation for structural elegance, a physician\u2019s wonder at the human body\u200a\u2014\u200athese are not secular reactions. They are exactly the reflection the Qur\u2019an invites.",
   },
   {
     arabic:
-      "قُلْ هَلْ يَسْتَوِى ٱلَّذِينَ يَعْلَمُونَ وَٱلَّذِينَ لَا يَعْلَمُونَ",
+      "قُلْ هَلْ يَسْتَوِى ٱلَّذِينَ يَعْلَمُونَ وَٱلَّذِينَ لَا يَعْلَمُونَ ۗ إِنَّمَا يَتَذَكَّرُ أُو۟لُوا۟ ٱلْأَلْبَـٰبِ",
     english:
-      "Say, \u201cAre those who know equal to those who do not know?\u201d",
-    ref: "39:9",
+      "Say, \u201cAre those who know equal to those who do not know?\u201d Only they will remember [who are] people of understanding.",
+    ref: "39:9 (excerpt), Sahih International",
     heading: "The distinction",
     body: "Knowledge is honoured in the Qur\u2019an\u200a\u2014\u200anot as an abstract virtue, but as something that changes how you stand before God. DoQuran\u2019s recognition system (perspective seals, community votes, contributor tiers) is built on this principle: thoughtful engagement with the Qur\u2019an should be visible, celebrated, and shared. Your reflection matters, and the community will tell you when it helps them.",
   },

@@ -91,11 +91,11 @@ export function RegisterForm() {
       <div>
         <blockquote className="mb-4 text-center" dir="rtl">
           <p className="font-quran text-lg leading-[1.9] text-[var(--dq-ink)]">
-            وَلَقَدْ يَسَّرْنَا ٱلْقُرْءَانَ لِلذِّكْرِ فَهَلْ مِن مُّدَّكِرٍ
+            وَلَقَدْ يَسَّرْنَا ٱلْقُرْءَانَ لِلذِّكْرِ فَهَلْ مِن مُّدَّكِرٍۢ
           </p>
           <p className="font-display mt-1.5 text-xs font-medium italic text-[var(--dq-muted)]" dir="ltr">
-            &ldquo;We have made the Qur&apos;an easy for remembrance — so is there any who will remember?&rdquo;
-            <span className="ml-1 not-italic text-[var(--dq-gold-muted)]">54:17</span>
+            &ldquo;And We have certainly made the Qur&apos;an easy for remembrance, so is there any who will remember?&rdquo;
+            <span className="ml-1 not-italic text-[var(--dq-gold-muted)]">54:17, Sahih International</span>
           </p>
         </blockquote>
         <h1 className="font-display text-2xl font-semibold tracking-wide text-[var(--dq-ink)]">
