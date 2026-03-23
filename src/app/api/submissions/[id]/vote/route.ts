@@ -116,6 +116,43 @@ export async function POST(req: Request, ctx: Ctx) {
     }
   }
 
+  // --- create notification for the submission author ---
+  if (submission.userId !== userId) {
+    const voteWord = value === 1 ? "upvoted" : "downvoted";
+    const snippet =
+      (await prisma.submission.findUnique({
+        where: { id: submissionId },
+        select: { reflection: true },
+      }))?.reflection.slice(0, 60) ?? "";
+
+    await prisma.notification.create({
+      data: {
+        userId: submission.userId,
+        type: "vote",
+        title: `Your reflection was ${voteWord}`,
+        body: snippet ? `"${snippet}…"` : "Someone voted on your reflection.",
+        href: `/submissions/${submissionId}`,
+      },
+    }).catch(() => {});
+
+    for (const lc of levelChanges) {
+      const badge = sealSlugs.includes(lc.sealSlug)
+        ? submission.submissionBadges.find((sb) => sb.badge.slug === lc.sealSlug)?.badge
+        : null;
+      const label = badge?.slug ?? lc.sealSlug;
+      const tierNames = ["Unranked", "Rising", "Established", "Distinguished"];
+      await prisma.notification.create({
+        data: {
+          userId: submission.userId,
+          type: "level_up",
+          title: `You reached ${tierNames[lc.newLevel]} ${label}!`,
+          body: "Your contributions are being recognized by the community.",
+          href: `/profile/${submission.userId}`,
+        },
+      }).catch(() => {});
+    }
+  }
+
   return NextResponse.json({
     score: scoreFromVotes(votes),
     voteCount: votes.length,

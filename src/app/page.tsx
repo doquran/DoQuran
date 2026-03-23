@@ -47,12 +47,19 @@ function SectionTitle({ children }: { children: ReactNode }) {
   );
 }
 
+type SortMode = "recent" | "top" | "trending";
+
 type HomeProps = {
-  searchParams: Promise<{ seal?: string }>;
+  searchParams: Promise<{ seal?: string; sort?: string }>;
 };
 
 export default async function HomePage({ searchParams }: HomeProps) {
-  const { seal: sealFilter } = await searchParams;
+  const params = await searchParams;
+  const sealFilter = params.seal;
+  const sortMode: SortMode =
+    params.sort === "top" || params.sort === "trending"
+      ? params.sort
+      : "recent";
   const daily = await getDailyVerse();
 
   const [userCount, submissionCount, voteCount, forDaily, recent] =
@@ -80,19 +87,36 @@ export default async function HomePage({ searchParams }: HomeProps) {
             },
           })
         : Promise.resolve([]),
-      prisma.submission.findMany({
-        where: sealFilter
+      (async () => {
+        const sealWhere = sealFilter
           ? { submissionBadges: { some: { badge: { slug: sealFilter } } } }
-          : {},
-        orderBy: { createdAt: "desc" },
-        take: 8,
-        include: {
-          user: { select: { id: true, email: true, name: true, avatarSeed: true } },
-          verses: true,
-          votes: { select: { value: true } },
-          submissionBadges: { include: { badge: true } },
-        },
-      }),
+          : {};
+        const sevenDaysAgo = new Date(new Date().getTime() - 7 * 86_400_000);
+        const where =
+          sortMode === "trending"
+            ? { ...sealWhere, createdAt: { gte: sevenDaysAgo } }
+            : sealWhere;
+
+        const subs = await prisma.submission.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          take: sortMode === "recent" ? 8 : 50,
+          include: {
+            user: { select: { id: true, email: true, name: true, avatarSeed: true } },
+            verses: true,
+            votes: { select: { value: true } },
+            submissionBadges: { include: { badge: true } },
+          },
+        });
+
+        if (sortMode === "top" || sortMode === "trending") {
+          subs.sort(
+            (a, b) => scoreFromVotes(b.votes) - scoreFromVotes(a.votes),
+          );
+          return subs.slice(0, 12);
+        }
+        return subs;
+      })(),
     ]);
 
   const mapPreview = (s: SubmissionCard): Preview => ({
@@ -260,18 +284,42 @@ export default async function HomePage({ searchParams }: HomeProps) {
         <SectionTitle>
           {sealFilter
             ? `Reflections — ${sealFilter.charAt(0).toUpperCase()}${sealFilter.slice(1)}`
-            : "Recent contributions"}
+            : sortMode === "top"
+              ? "Top contributions"
+              : sortMode === "trending"
+                ? "Trending this week"
+                : "Recent contributions"}
         </SectionTitle>
-        {sealFilter ? (
-          <div className="mb-6 flex justify-center">
+
+        {/* Sort tabs + filter controls */}
+        <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
+          {(["recent", "top", "trending"] as const).map((mode) => {
+            const label = mode === "recent" ? "Recent" : mode === "top" ? "Top" : "Trending";
+            const isActive = sortMode === mode;
+            const sealParam = sealFilter ? `&seal=${sealFilter}` : "";
+            return (
+              <Link
+                key={mode}
+                href={`/?sort=${mode}${sealParam}#recent`}
+                className={`font-outfit rounded-full px-4 py-2 text-xs font-bold tracking-wide transition ${
+                  isActive
+                    ? "bg-[var(--dq-primary)] text-[color-mix(in_srgb,white_95%,var(--dq-gold))] shadow-[var(--dq-shadow-sm)]"
+                    : "border border-[var(--dq-border)] bg-[var(--dq-surface)] text-[var(--dq-muted)] hover:border-[color-mix(in_srgb,var(--dq-primary)_25%,var(--dq-border))] hover:text-[var(--dq-ink)]"
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
+          {sealFilter ? (
             <Link
-              href="/#recent"
-              className="font-outfit inline-flex items-center gap-2 rounded-full border border-dashed border-[color-mix(in_srgb,var(--dq-primary)_35%,var(--dq-border))] bg-[color-mix(in_srgb,var(--dq-primary)_6%,var(--dq-surface))] px-4 py-2 text-xs font-bold tracking-wide text-[var(--dq-primary)] transition hover:bg-[color-mix(in_srgb,var(--dq-primary)_12%,var(--dq-surface))]"
+              href={`/?sort=${sortMode}#recent`}
+              className="font-outfit inline-flex items-center gap-1.5 rounded-full border border-dashed border-[color-mix(in_srgb,var(--dq-primary)_35%,var(--dq-border))] bg-[color-mix(in_srgb,var(--dq-primary)_6%,var(--dq-surface))] px-4 py-2 text-xs font-bold tracking-wide text-[var(--dq-primary)] transition hover:bg-[color-mix(in_srgb,var(--dq-primary)_12%,var(--dq-surface))]"
             >
-              <span aria-hidden>✕</span> Clear filter
+              <span aria-hidden>✕</span> {sealFilter}
             </Link>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
         {recent.length === 0 ? (
           <p className="font-outfit text-center text-[var(--dq-muted)]">
             {sealFilter

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { ChangePasswordForm } from "@/components/ChangePasswordForm";
 import { DeleteAccountForm } from "@/components/DeleteAccountForm";
 import { ProfileEditForm } from "@/components/ProfileEditForm";
 import { ResendVerificationButton } from "@/components/ResendVerificationButton";
@@ -72,6 +73,13 @@ export default async function SettingsPage() {
           initialBio={user.bio ?? ""}
           avatarSeed={user.avatarSeed}
         />
+      </section>
+
+      <section className="mt-14 border-t border-[color-mix(in_srgb,var(--dq-border)_85%,var(--dq-gold)_15%)] pt-10">
+        <h2 className="font-display mb-5 text-lg font-semibold tracking-wide text-[var(--dq-ink)]">
+          Security
+        </h2>
+        <ChangePasswordForm />
       </section>
 
       <section className="mt-14 border-t border-[color-mix(in_srgb,var(--dq-border)_85%,var(--dq-gold)_15%)] pt-10">

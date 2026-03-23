@@ -2,8 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// PRODUCTION: use "postgresql" with a Neon connection string
+// LOCAL DEV: use "sqlite" with DATABASE_URL="file:./dev.db"
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -26,6 +28,22 @@ model User {
   reports        Report[]
   sealProgress   SealProgress[]
   tokens         Token[]
+  notifications  Notification[]
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // "vote" | "level_up" | "milestone"
+  title     String
+  body      String
+  href      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, read])
+  @@index([userId, createdAt])
 }
 
 model Token {

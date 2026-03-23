@@ -1,16 +1,52 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ReportSubmission } from "@/components/ReportSubmission";
 import { PerspectiveBadges } from "@/components/PerspectiveBadges";
+import { ShareSubmissionButton } from "@/components/ShareSubmissionButton";
 import { VotePanel } from "@/components/VotePanel";
 import { getSessionUserId } from "@/lib/auth";
 import { badgeChipsFromSubmission } from "@/lib/badges";
 import { prisma } from "@/lib/prisma";
 import { scoreFromVotes } from "@/lib/submission-score";
-
-export const metadata = { title: "Contribution" };
+import { baseUrl } from "@/lib/url";
 
 type PageProps = { params: Promise<{ id: string }> };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const s = await prisma.submission.findUnique({
+    where: { id },
+    select: {
+      reflection: true,
+      user: { select: { name: true, email: true } },
+      verses: { select: { surah: true, ayah: true } },
+      submissionBadges: { select: { badge: { select: { label: true } } } },
+    },
+  });
+  if (!s) return { title: "Contribution" };
+
+  const author = s.user.name?.trim() || s.user.email.split("@")[0];
+  const refs = s.verses.map((v) => `${v.surah}:${v.ayah}`).join(", ");
+  const seals = s.submissionBadges.map((sb) => sb.badge.label).join(", ");
+  const snippet = s.reflection.length > 160 ? `${s.reflection.slice(0, 157)}…` : s.reflection;
+  const title = `${author} on ${refs}${seals ? ` — ${seals}` : ""}`;
+
+  return {
+    title,
+    description: snippet,
+    openGraph: {
+      title: `${title} · DoQuran`,
+      description: snippet,
+      type: "article",
+    },
+    twitter: {
+      card: "summary",
+      title: `${title} · DoQuran`,
+      description: snippet,
+    },
+  };
+}
 
 function verseLabel(v: { surah: number; ayah: number }) {
   return `${v.surah}:${v.ayah}`;
@@ -95,6 +131,18 @@ export default async function SubmissionPage({ params }: PageProps) {
               {s.reflection}
             </p>
           </section>
+          <div className="mt-8 flex items-center gap-3 border-t border-[color-mix(in_srgb,var(--dq-border)_85%,var(--dq-gold)_15%)] pt-6">
+            <ShareSubmissionButton
+              url={`${baseUrl()}/submissions/${s.id}`}
+              title={`${author} on ${refs} — DoQuran`}
+            />
+            <Link
+              href={`/profile/${s.user.id}`}
+              className="font-outfit text-xs font-medium text-[var(--dq-muted)] transition hover:text-[var(--dq-primary)]"
+            >
+              View {author}&apos;s profile
+            </Link>
+          </div>
         </article>
       </div>
       <div className="mt-12 space-y-4">

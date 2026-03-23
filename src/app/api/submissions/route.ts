@@ -6,6 +6,7 @@ import { parseVerseRefs } from "@/lib/verse-parse";
 import { scoreFromVotes } from "@/lib/submission-score";
 import { rateLimitOrResponse } from "@/lib/rate-limit";
 import { badgeChipsFromSubmission, normalizeBadgeSlugs } from "@/lib/badges";
+import { moderateContent } from "@/lib/moderation";
 
 const createSchema = z.object({
   versesRaw: z.string().min(1).max(4000),
@@ -121,6 +122,20 @@ export async function POST(req: Request) {
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Invalid verses.";
     return NextResponse.json({ error: msg }, { status: 400 });
+  }
+
+  // --- LLM content moderation ---
+  const modResult = await moderateContent(parsed.data.reflection);
+  if (!modResult.allowed) {
+    return NextResponse.json(
+      {
+        error:
+          "Your reflection was flagged for content that violates our guidelines (" +
+          modResult.categories.join(", ") +
+          "). Please revise and try again.",
+      },
+      { status: 422 },
+    );
   }
 
   const badgeSlugs = normalizeBadgeSlugs(parsed.data.badgeSlugs);

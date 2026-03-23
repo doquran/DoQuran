@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { DoQuranBrandLogo } from "@/components/DoQuranBrandLogo";
+import { NotificationBell } from "@/components/NotificationBell";
 
 export type SessionUser = {
   id: string;
@@ -162,6 +163,7 @@ export function SiteHeader({ initialUser }: Props) {
           </Link>
           {user ? (
             <>
+              <NotificationBell />
               <Link
                 href={`/profile/${user.id}`}
                 className="hidden items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--dq-border)_82%,var(--dq-gold)_18%)] bg-[var(--dq-surface-muted)] px-3 py-1.5 text-[0.9375rem] font-semibold tracking-wide text-[var(--dq-ink)] shadow-[var(--dq-shadow-sm)] transition hover:border-[color-mix(in_srgb,var(--dq-primary)_25%,var(--dq-border))] sm:inline-flex lg:text-base"

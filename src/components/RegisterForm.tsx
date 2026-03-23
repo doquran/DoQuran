@@ -13,6 +13,7 @@ export function RegisterForm() {
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [registered, setRegistered] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -40,12 +41,46 @@ export function RegisterForm() {
         setBusy(false);
         return;
       }
-      router.push(nextUrl.startsWith("/") ? nextUrl : "/");
+      setRegistered(true);
       router.refresh();
     } catch {
       setError("Network error.");
       setBusy(false);
     }
+  }
+
+  if (registered) {
+    return (
+      <div className="dq-card mx-auto flex max-w-md flex-col items-center gap-5 p-8 text-center sm:p-9">
+        <span className="text-4xl">📧</span>
+        <h1 className="font-display text-2xl font-semibold tracking-wide text-[var(--dq-ink)]">
+          Welcome to DoQuran!
+        </h1>
+        <p className="text-sm leading-relaxed text-[var(--dq-muted)]">
+          We sent a verification email to{" "}
+          <strong className="text-[var(--dq-ink)]">{email}</strong>. Please
+          check your inbox and click the link to verify your account.
+        </p>
+        <p className="text-xs text-[var(--dq-muted)]">
+          You can browse the platform while you wait, but you&apos;ll need to
+          verify before contributing.
+        </p>
+        <div className="mt-2 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/"
+            className="font-outfit inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--dq-primary)] px-7 py-3 text-sm font-bold tracking-wide text-[color-mix(in_srgb,white_95%,var(--dq-gold))] shadow-[var(--dq-shadow-primary)] ring-1 ring-[color-mix(in_srgb,var(--dq-gold)_30%,transparent)] transition hover:brightness-110"
+          >
+            Explore DoQuran
+          </Link>
+          <Link
+            href="/settings"
+            className="font-outfit inline-flex min-h-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--dq-border)_85%,var(--dq-gold)_15%)] bg-[var(--dq-surface)] px-6 py-3 text-sm font-bold tracking-wide text-[var(--dq-ink)] shadow-[var(--dq-shadow-sm)] transition hover:bg-[var(--dq-muted-bg)]"
+          >
+            Set up your profile
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
