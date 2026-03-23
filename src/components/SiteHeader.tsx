@@ -132,7 +132,7 @@ export function SiteHeader({ initialUser }: Props) {
           onClick={() => setMenuOpen(false)}
           className="group flex min-w-0 shrink items-center outline-none ring-[var(--dq-primary)] ring-offset-2 ring-offset-[var(--dq-bg)] focus-visible:rounded-lg focus-visible:ring-2"
         >
-          <DoQuranBrandLogo className="h-12 w-auto max-w-[min(11rem,56vw)] sm:h-16 sm:max-w-[min(18rem,72vw)] lg:h-[5.5rem] lg:max-w-[min(32rem,92vw)] xl:h-[6.5rem] xl:max-w-none" />
+          <DoQuranBrandLogo className="h-9 w-auto max-w-[min(9rem,48vw)] sm:h-11 sm:max-w-[min(14rem,60vw)] lg:h-14 lg:max-w-[min(22rem,80vw)] xl:h-16 xl:max-w-none" />
         </Link>
 
         <button
