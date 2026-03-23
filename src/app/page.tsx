@@ -138,9 +138,17 @@ export default async function HomePage({ searchParams }: HomeProps) {
           <span className="dq-ornament__dot" aria-hidden />
           <span className="dq-ornament__line dq-ornament__line--r max-w-[4.5rem]" aria-hidden />
         </div>
-        <p className="font-outfit mb-5 inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--dq-gold)_38%,var(--dq-border))] bg-[color-mix(in_srgb,var(--dq-surface)_92%,var(--dq-gold)_5%)] px-5 py-2 text-[0.65rem] font-bold uppercase tracking-[0.24em] text-[var(--dq-gold-muted)] shadow-[var(--dq-shadow-sm)] ring-1 ring-[color-mix(in_srgb,var(--dq-gold)_14%,transparent)]">
-          Today&apos;s verse · Community recognition
-        </p>
+        <blockquote className="mb-8" dir="rtl">
+          <p className="font-quran text-[clamp(1.5rem,4vw,2.2rem)] leading-[2] text-[var(--dq-ink)]">
+            أَفَلَا يَتَدَبَّرُونَ ٱلْقُرْءَانَ
+          </p>
+          <p className="font-display mt-2 text-base font-medium italic tracking-wide text-[var(--dq-muted)]" dir="ltr">
+            &ldquo;Do they not reflect upon the Qur&apos;an?&rdquo;
+            <span className="ml-1 not-italic text-[var(--dq-gold-muted)]">
+              — 47:24
+            </span>
+          </p>
+        </blockquote>
         <h1 className="font-display text-balance text-[clamp(2.1rem,5.5vw,3.35rem)] font-semibold leading-[1.12] tracking-wide text-[var(--dq-ink)]">
           Where the Qur&apos;an meets{" "}
           <span className="dq-gradient-word">modern expertise</span>
@@ -167,12 +175,12 @@ export default async function HomePage({ searchParams }: HomeProps) {
           >
             Write a reflection
           </Link>
-          <a
-            href="#recent"
+          <Link
+            href="/why-reflect"
             className="inline-flex min-h-11 items-center justify-center rounded-full border border-dashed border-[color-mix(in_srgb,var(--dq-border)_88%,var(--dq-gold)_12%)] bg-transparent px-6 py-3 text-sm font-bold tracking-wide text-[var(--dq-muted)] transition hover:border-[color-mix(in_srgb,var(--dq-primary)_28%,var(--dq-border))] hover:text-[var(--dq-ink)]"
           >
-            Browse voices ↓
-          </a>
+            Why reflect?
+          </Link>
         </div>
       </section>
 

@@ -36,9 +36,17 @@ export default async function ContributePage() {
             aria-hidden
           />
         </div>
-        <p className="font-outfit mb-2 text-[0.65rem] font-bold uppercase tracking-[0.26em] text-[var(--dq-gold-muted)]">
-          For builders of meaning
-        </p>
+        <blockquote className="mb-6 text-center sm:text-left" dir="rtl">
+          <p className="font-quran text-xl leading-[1.9] text-[var(--dq-ink)] sm:text-2xl">
+            كِتَـٰبٌ أَنزَلْنَـٰهُ إِلَيْكَ مُبَـٰرَكٌ لِّيَدَّبَّرُوٓا۟ ءَايَـٰتِهِۦ
+          </p>
+          <p className="font-display mt-2 text-sm font-medium italic text-[var(--dq-muted)]" dir="ltr">
+            &ldquo;A blessed Book We have revealed to you, that they might reflect upon its verses.&rdquo;
+            <span className="ml-1 not-italic text-[var(--dq-gold-muted)]">
+              — 38:29
+            </span>
+          </p>
+        </blockquote>
         <h1 className="font-display text-3xl font-semibold tracking-wide text-[var(--dq-ink)] sm:text-[2.35rem]">
           New contribution
         </h1>

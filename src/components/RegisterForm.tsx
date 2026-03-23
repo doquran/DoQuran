@@ -89,11 +89,20 @@ export function RegisterForm() {
       className="dq-card mx-auto flex max-w-md flex-col gap-5 p-8 sm:p-9"
     >
       <div>
+        <blockquote className="mb-4 text-center" dir="rtl">
+          <p className="font-quran text-lg leading-[1.9] text-[var(--dq-ink)]">
+            وَلَقَدْ يَسَّرْنَا ٱلْقُرْءَانَ لِلذِّكْرِ فَهَلْ مِن مُّدَّكِرٍ
+          </p>
+          <p className="font-display mt-1.5 text-xs font-medium italic text-[var(--dq-muted)]" dir="ltr">
+            &ldquo;We have made the Qur&apos;an easy for remembrance — so is there any who will remember?&rdquo;
+            <span className="ml-1 not-italic text-[var(--dq-gold-muted)]">54:17</span>
+          </p>
+        </blockquote>
         <h1 className="font-display text-2xl font-semibold tracking-wide text-[var(--dq-ink)]">
           Create an account
         </h1>
         <p className="mt-1 text-sm text-[var(--dq-muted)]">
-          Email and password — optional display name.
+          Join a community of reflective minds.
         </p>
       </div>
       <div>

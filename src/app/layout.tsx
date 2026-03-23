@@ -138,6 +138,12 @@ export default async function RootLayout({
               aria-label="Site"
             >
               <Link
+                href="/why-reflect"
+                className="text-[var(--dq-primary)] underline decoration-[color-mix(in_srgb,var(--dq-gold)_35%,var(--dq-border))] underline-offset-[3px] transition hover:decoration-[var(--dq-gold)]"
+              >
+                Why reflect?
+              </Link>
+              <Link
                 href="/about"
                 className="text-[var(--dq-primary)] underline decoration-[color-mix(in_srgb,var(--dq-gold)_35%,var(--dq-border))] underline-offset-[3px] transition hover:decoration-[var(--dq-gold)]"
               >
