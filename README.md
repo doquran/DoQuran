@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DoQuran
 
-## Getting Started
+Next.js app: daily Quranic verse (via [Al Quran Cloud](https://alquran.cloud/api)), registered users post reflections on verse ranges, and the community votes.
 
-First, run the development server:
+## Requirements
+
+- Node 20+
+- npm (or pnpm/yarn)
+
+## Setup
 
 ```bash
+cp .env.example .env
+# Set JWT_SECRET to a long random string (e.g. openssl rand -hex 32)
+npm install
+npm run db:push
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Purpose |
+| -------- | ------- |
+| `DATABASE_URL` | Prisma connection string. SQLite example: `file:./dev.db` |
+| `JWT_SECRET` | Secret for signing session cookies (required) |
+| `RATE_LIMIT_DISABLED` | Set to `true` to turn off in-memory rate limits (e.g. local e2e tests) |
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Command | Description |
+| ------- | ----------- |
+| `npm run dev` | Development server |
+| `npm run build` | Production build (`prisma generate` + `next build`) |
+| `npm run start` | Serve production build |
+| `npm run lint` | ESLint |
+| `npm test` | Vitest unit tests |
+| `npm run db:push` | Push Prisma schema to the database |
+| `npm run db:studio` | Prisma Studio |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Production notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Use **PostgreSQL** (or another server database) instead of SQLite for multi-instance hosting.
+- Rate limiting is **in-process**; for several app servers, use a shared store (e.g. Redis / Upstash) and the same keys.
+- Replace placeholder **Privacy** and **Terms** copy with counsel-reviewed documents.
+- Configure **HTTPS**, strong `JWT_SECRET`, and trusted **reverse proxy** headers for `X-Forwarded-For` if you rely on IP limits.
+- Review **Al Quran Cloud** terms for your use case.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Private / unlicensed unless you add a `LICENSE` file.
