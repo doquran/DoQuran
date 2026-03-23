@@ -84,6 +84,14 @@ export function LoginForm() {
           className="dq-input"
         />
       </div>
+      <div className="flex justify-end">
+        <Link
+          href="/forgot-password"
+          className="text-xs font-medium text-[var(--dq-primary)] underline decoration-[var(--dq-border)] underline-offset-2 transition hover:decoration-[var(--dq-primary)]"
+        >
+          Forgot password?
+        </Link>
+      </div>
       {error ? (
         <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/50 dark:text-red-200">
           {error}

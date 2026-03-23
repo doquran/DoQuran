@@ -5,10 +5,12 @@ import { getSessionUserId } from "@/lib/auth";
 import { parseVerseRefs } from "@/lib/verse-parse";
 import { scoreFromVotes } from "@/lib/submission-score";
 import { rateLimitOrResponse } from "@/lib/rate-limit";
+import { badgeChipsFromSubmission, normalizeBadgeSlugs } from "@/lib/badges";
 
 const createSchema = z.object({
   versesRaw: z.string().min(1).max(4000),
   reflection: z.string().min(1).max(65_000),
+  badgeSlugs: z.array(z.string()).max(12).optional(),
 });
 
 function includeSubmission() {
@@ -16,6 +18,7 @@ function includeSubmission() {
     user: { select: { id: true, email: true, name: true } },
     verses: true,
     votes: { select: { value: true, userId: true } },
+    submissionBadges: { include: { badge: true } },
   } as const;
 }
 
@@ -68,6 +71,7 @@ export async function GET(req: Request) {
       },
       score: scoreFromVotes(s.votes),
       voteCount: s.votes.length,
+      badges: badgeChipsFromSubmission(s.submissionBadges),
     })),
     page,
     limit,
@@ -83,6 +87,17 @@ export async function POST(req: Request) {
   const userId = await getSessionUserId();
   if (!userId) {
     return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+  }
+
+  const currentUser = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { emailVerified: true },
+  });
+  if (currentUser && !currentUser.emailVerified) {
+    return NextResponse.json(
+      { error: "Please verify your email before contributing." },
+      { status: 403 },
+    );
   }
 
   let body: unknown;
@@ -108,6 +123,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 
+  const badgeSlugs = normalizeBadgeSlugs(parsed.data.badgeSlugs);
+  const badgeRows =
+    badgeSlugs.length > 0
+      ? await prisma.badge.findMany({
+          where: { slug: { in: badgeSlugs } },
+        })
+      : [];
+
   const submission = await prisma.submission.create({
     data: {
       userId,
@@ -115,9 +138,56 @@ export async function POST(req: Request) {
       verses: {
         create: refs.map((r) => ({ surah: r.surah, ayah: r.ayah })),
       },
+      submissionBadges:
+        badgeRows.length > 0
+          ? {
+              create: badgeRows.map((b) => ({ badgeId: b.id })),
+            }
+          : undefined,
     },
     include: includeSubmission(),
   });
+
+  // --- streak tracking ---
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { lastActiveDate: true, currentStreak: true, longestStreak: true },
+  });
+  if (user) {
+    const todayUTC = new Date(
+      Date.UTC(
+        new Date().getUTCFullYear(),
+        new Date().getUTCMonth(),
+        new Date().getUTCDate(),
+      ),
+    );
+    let newStreak = 1;
+    if (user.lastActiveDate) {
+      const lastUTC = new Date(
+        Date.UTC(
+          user.lastActiveDate.getUTCFullYear(),
+          user.lastActiveDate.getUTCMonth(),
+          user.lastActiveDate.getUTCDate(),
+        ),
+      );
+      const diffDays = Math.round(
+        (todayUTC.getTime() - lastUTC.getTime()) / 86_400_000,
+      );
+      if (diffDays === 0) {
+        newStreak = user.currentStreak;
+      } else if (diffDays === 1) {
+        newStreak = user.currentStreak + 1;
+      }
+    }
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        currentStreak: newStreak,
+        longestStreak: Math.max(newStreak, user.longestStreak),
+        lastActiveDate: todayUTC,
+      },
+    });
+  }
 
   return NextResponse.json({
     submission: {
@@ -133,6 +203,7 @@ export async function POST(req: Request) {
       },
       score: 0,
       voteCount: 0,
+      badges: badgeChipsFromSubmission(submission.submissionBadges),
     },
   });
 }

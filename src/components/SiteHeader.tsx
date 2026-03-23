@@ -9,6 +9,8 @@ export type SessionUser = {
   id: string;
   email: string;
   name: string | null;
+  displayName?: string | null;
+  avatarSeed?: string;
 };
 
 type Props = { initialUser: SessionUser | null };
@@ -160,12 +162,25 @@ export function SiteHeader({ initialUser }: Props) {
           </Link>
           {user ? (
             <>
-              <span
-                className="hidden max-w-[13rem] truncate rounded-full border border-[color-mix(in_srgb,var(--dq-border)_82%,var(--dq-gold)_18%)] bg-[var(--dq-surface-muted)] px-3.5 py-2 text-center text-[0.9375rem] font-semibold tracking-wide text-[var(--dq-ink)] shadow-[var(--dq-shadow-sm)] sm:inline lg:text-base"
+              <Link
+                href={`/profile/${user.id}`}
+                className="hidden items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--dq-border)_82%,var(--dq-gold)_18%)] bg-[var(--dq-surface-muted)] px-3 py-1.5 text-[0.9375rem] font-semibold tracking-wide text-[var(--dq-ink)] shadow-[var(--dq-shadow-sm)] transition hover:border-[color-mix(in_srgb,var(--dq-primary)_25%,var(--dq-border))] sm:inline-flex lg:text-base"
                 title={user.email}
               >
-                {user.name?.trim() || user.email.split("@")[0]}
-              </span>
+                {user.avatarSeed ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={`https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(user.avatarSeed)}&size=56&backgroundColor=transparent`}
+                    alt=""
+                    width={28}
+                    height={28}
+                    className="h-7 w-7 rounded-full"
+                  />
+                ) : null}
+                <span className="max-w-[10rem] truncate">
+                  {user.displayName?.trim() || user.name?.trim() || user.email.split("@")[0]}
+                </span>
+              </Link>
               <Link
                 href="/settings"
                 className={navLinkClass(pathname === "/settings")}
@@ -223,12 +238,26 @@ export function SiteHeader({ initialUser }: Props) {
             </Link>
             {user ? (
               <>
-                <p
-                  className="truncate rounded-full border border-[color-mix(in_srgb,var(--dq-border)_82%,var(--dq-gold)_18%)] bg-[var(--dq-surface-muted)] px-4 py-2.5 text-center text-[0.9375rem] font-semibold tracking-wide text-[var(--dq-ink)] shadow-[var(--dq-shadow-sm)]"
+                <Link
+                  href={`/profile/${user.id}`}
+                  className="flex items-center justify-center gap-2.5 rounded-full border border-[color-mix(in_srgb,var(--dq-border)_82%,var(--dq-gold)_18%)] bg-[var(--dq-surface-muted)] px-4 py-2.5 text-center text-[0.9375rem] font-semibold tracking-wide text-[var(--dq-ink)] shadow-[var(--dq-shadow-sm)] transition hover:border-[color-mix(in_srgb,var(--dq-primary)_25%,var(--dq-border))]"
                   title={user.email}
+                  onClick={() => setMenuOpen(false)}
                 >
-                  {user.name?.trim() || user.email.split("@")[0]}
-                </p>
+                  {user.avatarSeed ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={`https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(user.avatarSeed)}&size=56&backgroundColor=transparent`}
+                      alt=""
+                      width={28}
+                      height={28}
+                      className="h-7 w-7 rounded-full"
+                    />
+                  ) : null}
+                  <span className="truncate">
+                    {user.displayName?.trim() || user.name?.trim() || user.email.split("@")[0]}
+                  </span>
+                </Link>
                 <Link
                   href="/settings"
                   className={navLinkClass(pathname === "/settings", true)}

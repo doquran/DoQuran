@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ReportSubmission } from "@/components/ReportSubmission";
+import { PerspectiveBadges } from "@/components/PerspectiveBadges";
 import { VotePanel } from "@/components/VotePanel";
 import { getSessionUserId } from "@/lib/auth";
+import { badgeChipsFromSubmission } from "@/lib/badges";
 import { prisma } from "@/lib/prisma";
 import { scoreFromVotes } from "@/lib/submission-score";
 
@@ -24,6 +26,7 @@ export default async function SubmissionPage({ params }: PageProps) {
       user: { select: { id: true, name: true, email: true } },
       verses: true,
       votes: true,
+      submissionBadges: { include: { badge: true } },
     },
   });
 
@@ -40,6 +43,8 @@ export default async function SubmissionPage({ params }: PageProps) {
     ? "You cannot vote on your own post."
     : null;
 
+  const badges = badgeChipsFromSubmission(s.submissionBadges);
+
   return (
     <main className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-16">
       <Link
@@ -55,6 +60,7 @@ export default async function SubmissionPage({ params }: PageProps) {
             initialScore={score}
             initialMyVote={myVote}
             voteDisabledReason={voteDisabledReason}
+            badgeMeta={badges.map((b) => ({ slug: b.slug, label: b.label }))}
           />
         </div>
         <article className="dq-card min-w-0 max-w-3xl flex-1 p-7 sm:p-10">
@@ -72,10 +78,18 @@ export default async function SubmissionPage({ params }: PageProps) {
                 dateStyle: "long",
               })}
             </p>
+            {badges.length > 0 ? (
+              <div className="mt-6 flex flex-col items-center gap-2 sm:items-start">
+                <p className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--dq-gold-muted)]">
+                  Perspective seals
+                </p>
+                <PerspectiveBadges badges={badges} size="md" />
+              </div>
+            ) : null}
           </header>
           <section>
             <h2 className="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--dq-gold-muted)]">
-              Thoughts
+              Reflection
             </h2>
             <p className="whitespace-pre-wrap text-base leading-[1.8] text-[var(--dq-ink)]">
               {s.reflection}
@@ -85,6 +99,7 @@ export default async function SubmissionPage({ params }: PageProps) {
       </div>
       <div className="mt-12 space-y-4">
         <p className="text-center text-xs tracking-wide text-[var(--dq-muted)]">
+          Votes are community recognition—help lift careful, honest readings.
           Click the same arrow again to retract your vote.
         </p>
         {userId && !isOwner ? (

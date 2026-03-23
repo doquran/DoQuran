@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSessionUserId } from "@/lib/auth";
+import { sealTier } from "@/lib/levels";
 import { scoreFromVotes } from "@/lib/submission-score";
 import { rateLimitOrResponse } from "@/lib/rate-limit";
 
@@ -37,7 +38,11 @@ export async function POST(req: Request, ctx: Ctx) {
 
   const submission = await prisma.submission.findUnique({
     where: { id: submissionId },
-    select: { id: true, userId: true },
+    select: {
+      id: true,
+      userId: true,
+      submissionBadges: { select: { badge: { select: { slug: true } } } },
+    },
   });
   if (!submission) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -77,9 +82,45 @@ export async function POST(req: Request, ctx: Ctx) {
 
   const myVote = votes.find((v) => v.userId === userId)?.value ?? null;
 
+  // --- recalculate SealProgress for the submission's author ---
+  const sealSlugs = submission.submissionBadges.map((sb) => sb.badge.slug);
+  const levelChanges: { sealSlug: string; oldLevel: number; newLevel: number }[] = [];
+
+  for (const slug of sealSlugs) {
+    const authorPostsWithSeal = await prisma.submission.findMany({
+      where: {
+        userId: submission.userId,
+        submissionBadges: { some: { badge: { slug } } },
+      },
+      select: { votes: { select: { value: true } } },
+    });
+    const totalScore = authorPostsWithSeal.reduce(
+      (sum, s) => sum + s.votes.reduce((vs, v) => vs + v.value, 0),
+      0,
+    );
+    const newLevel = sealTier(totalScore);
+
+    const existing = await prisma.sealProgress.findUnique({
+      where: { userId_sealSlug: { userId: submission.userId, sealSlug: slug } },
+    });
+    const oldLevel = existing?.level ?? 0;
+
+    await prisma.sealProgress.upsert({
+      where: { userId_sealSlug: { userId: submission.userId, sealSlug: slug } },
+      create: { userId: submission.userId, sealSlug: slug, score: totalScore, level: newLevel },
+      update: { score: totalScore, level: newLevel },
+    });
+
+    if (newLevel > oldLevel) {
+      levelChanges.push({ sealSlug: slug, oldLevel, newLevel });
+    }
+  }
+
   return NextResponse.json({
     score: scoreFromVotes(votes),
     voteCount: votes.length,
     myVote,
+    levelChanges: levelChanges.length > 0 ? levelChanges : undefined,
+    authorId: submission.userId,
   });
 }

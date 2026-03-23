@@ -3,6 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  MAX_BADGES_PER_SUBMISSION,
+  PERSPECTIVE_BADGES,
+  perspectiveBadgeClasses,
+} from "@/lib/badges";
+import {
   MAX_VERSES_PER_CONTRIBUTION,
   tryParseVerseRefs,
 } from "@/lib/verse-parse";
@@ -21,10 +26,11 @@ type PreviewVerse = {
 
 const DEFAULT_VERSES: VerseRef[] = [{ surah: 2, ayah: 255 }];
 
-export function ContributeForm() {
+export function ContributeForm({ disabled = false }: { disabled?: boolean }) {
   const router = useRouter();
   const [verseList, setVerseList] = useState<VerseRef[]>(DEFAULT_VERSES);
   const [reflection, setReflection] = useState("");
+  const [badgeSlugs, setBadgeSlugs] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -139,6 +145,14 @@ export function ContributeForm() {
     }
   }
 
+  function toggleBadgeSlug(slug: string) {
+    setBadgeSlugs((prev) => {
+      if (prev.includes(slug)) return prev.filter((s) => s !== slug);
+      if (prev.length >= MAX_BADGES_PER_SUBMISSION) return prev;
+      return [...prev, slug];
+    });
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (verseList.length === 0) return;
@@ -148,7 +162,11 @@ export function ContributeForm() {
       const res = await fetch("/api/submissions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ versesRaw, reflection }),
+        body: JSON.stringify({
+          versesRaw,
+          reflection,
+          badgeSlugs: badgeSlugs.length ? badgeSlugs : undefined,
+        }),
       });
       const data = (await res.json()) as {
         error?: unknown;
@@ -272,6 +290,42 @@ export function ContributeForm() {
       </section>
 
       <div>
+        <span className={labelClass}>Perspective seals (optional)</span>
+        <p className="mb-3 text-xs leading-relaxed text-[var(--dq-muted)]">
+          Tag the lens you are writing from—so readers know if this is a
+          scientist&apos;s, engineer&apos;s, physician&apos;s, or scholar&apos;s
+          angle beside classical tafsīr. Choose up to {MAX_BADGES_PER_SUBMISSION}.
+        </p>
+        <div
+          className="flex flex-wrap gap-2.5"
+          role="group"
+          aria-label="Perspective seals"
+        >
+          {PERSPECTIVE_BADGES.map((b) => {
+            const on = badgeSlugs.includes(b.slug);
+            return (
+              <button
+                key={b.slug}
+                type="button"
+                aria-pressed={on}
+                title={b.tagline}
+                onClick={() => toggleBadgeSlug(b.slug)}
+                className={
+                  on
+                    ? `${perspectiveBadgeClasses(b.variant)} cursor-pointer transition hover:brightness-[1.03]`
+                    : "cursor-pointer rounded-full border border-dashed border-[color-mix(in_srgb,var(--dq-border)_88%,var(--dq-gold)_12%)] bg-[color-mix(in_srgb,var(--dq-surface-muted)_50%,transparent)] px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-[var(--dq-muted)] shadow-[var(--dq-shadow-sm)] transition hover:border-[color-mix(in_srgb,var(--dq-primary)_25%,var(--dq-border))] hover:text-[var(--dq-ink)] sm:text-[0.7rem]"
+                }
+              >
+                <span className="font-display font-semibold normal-case tracking-normal">
+                  {b.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div>
         <label htmlFor="reflection" className={labelClass}>
           Your thoughts
         </label>
@@ -292,7 +346,7 @@ export function ContributeForm() {
       ) : null}
       <button
         type="submit"
-        disabled={busy || !canSubmit}
+        disabled={disabled || busy || !canSubmit}
         className="rounded-full bg-[var(--dq-primary)] px-8 py-3.5 text-sm font-semibold tracking-wide text-[color-mix(in_srgb,white_95%,var(--dq-gold))] shadow-[var(--dq-shadow-primary)] ring-1 ring-[color-mix(in_srgb,var(--dq-gold)_28%,transparent)] transition duration-200 hover:brightness-110 disabled:opacity-50"
       >
         {busy ? "Posting…" : "Post"}

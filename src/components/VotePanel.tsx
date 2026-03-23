@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { dispatchLevelUp } from "@/components/LevelUpToast";
 
 type Props = {
   submissionId: string;
@@ -9,6 +10,8 @@ type Props = {
   initialMyVote: number | null;
   /** When set, voting controls are disabled (e.g. author viewing own post). */
   voteDisabledReason?: string | null;
+  /** Seal slugs + labels on this submission, used for level-up toasts. */
+  badgeMeta?: { slug: string; label: string }[];
 };
 
 export function VotePanel({
@@ -16,6 +19,7 @@ export function VotePanel({
   initialScore,
   initialMyVote,
   voteDisabledReason,
+  badgeMeta = [],
 }: Props) {
   const router = useRouter();
   const [score, setScore] = useState(initialScore);
@@ -52,9 +56,22 @@ export function VotePanel({
       const data = (await res.json()) as {
         score: number;
         myVote: number | null;
+        levelChanges?: { sealSlug: string; newLevel: number }[];
       };
       setScore(data.score);
       setMyVote(data.myVote);
+
+      if (data.levelChanges) {
+        for (const lc of data.levelChanges) {
+          const meta = badgeMeta.find((b) => b.slug === lc.sealSlug);
+          dispatchLevelUp({
+            sealSlug: lc.sealSlug,
+            sealLabel: meta?.label ?? lc.sealSlug,
+            newLevel: lc.newLevel,
+          });
+        }
+      }
+
       router.refresh();
     } catch {
       setError("Network error.");

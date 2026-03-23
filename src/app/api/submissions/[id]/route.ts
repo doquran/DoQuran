@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUserId } from "@/lib/auth";
 import { scoreFromVotes } from "@/lib/submission-score";
+import { badgeChipsFromSubmission } from "@/lib/badges";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -15,6 +16,7 @@ export async function GET(_req: Request, ctx: Ctx) {
       user: { select: { id: true, email: true, name: true } },
       verses: true,
       votes: { select: { value: true, userId: true } },
+      submissionBadges: { include: { badge: true } },
     },
   });
 
@@ -39,6 +41,7 @@ export async function GET(_req: Request, ctx: Ctx) {
       score: scoreFromVotes(s.votes),
       voteCount: s.votes.length,
       myVote,
+      badges: badgeChipsFromSubmission(s.submissionBadges),
     },
   });
 }

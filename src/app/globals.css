@@ -122,6 +122,61 @@ body.dq-body {
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
+.font-outfit {
+  font-family: var(--font-outfit), var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Hero & marketing — respect reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  .dq-hero-entry {
+    animation: dq-fade-up 0.85s ease-out both;
+  }
+
+  .dq-animate-in {
+    animation: dq-fade-up 0.72s ease-out both;
+    animation-delay: 0.06s;
+    animation-fill-mode: both;
+  }
+}
+
+@keyframes dq-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dq-gradient-word {
+  background: linear-gradient(
+    115deg,
+    var(--dq-primary) 0%,
+    var(--dq-gold-muted) 42%,
+    var(--dq-primary-soft) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dq-gradient-word {
+    background: linear-gradient(
+      115deg,
+      var(--dq-primary) 0%,
+      var(--dq-gold) 48%,
+      #99f6e4 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
 ::selection {
   background: color-mix(in srgb, var(--dq-gold) 35%, var(--dq-primary) 15%);
   color: var(--dq-ink);

@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, setSessionCookie, signSessionToken } from "@/lib/auth";
+import { sendMail } from "@/lib/mail";
 import { rateLimitOrResponse } from "@/lib/rate-limit";
+import { createToken } from "@/lib/tokens";
+import { baseUrl } from "@/lib/url";
 
 const schema = z.object({
   email: z.string().email().max(320),
@@ -43,13 +46,27 @@ export async function POST(req: Request) {
       name: name || null,
     },
   });
-  const token = await signSessionToken(user.id);
-  await setSessionCookie(token);
+  const sessionToken = await signSessionToken(user.id);
+  await setSessionCookie(sessionToken);
+
+  // Send verification email
+  const verifyToken = await createToken(user.id, "email_verify");
+  const link = `${baseUrl()}/verify-email?token=${verifyToken}`;
+  await sendMail(
+    email,
+    "Verify your DoQuran email",
+    `<p>Salaam! Welcome to DoQuran. Please verify your email by clicking the link below:</p>
+     <p><a href="${link}">${link}</a></p>
+     <p>This link expires in 24 hours.</p>
+     <p>— DoQuran</p>`,
+  );
+
   return NextResponse.json({
     user: {
       id: user.id,
       email: user.email,
       name: user.name,
+      emailVerified: false,
     },
   });
 }

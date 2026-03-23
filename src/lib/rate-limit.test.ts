@@ -6,7 +6,7 @@ function setRateLimitDisabled(value: string | undefined) {
   else process.env.RATE_LIMIT_DISABLED = value;
 }
 
-describe("checkRateLimit", () => {
+describe("checkRateLimit (in-memory fallback)", () => {
   it("allows requests under the cap", () => {
     const prev = process.env.RATE_LIMIT_DISABLED;
     setRateLimitDisabled("false");

@@ -1,5 +1,8 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { DeleteAccountForm } from "@/components/DeleteAccountForm";
+import { ProfileEditForm } from "@/components/ProfileEditForm";
+import { ResendVerificationButton } from "@/components/ResendVerificationButton";
 import { getSessionUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -11,7 +14,15 @@ export default async function SettingsPage() {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { email: true, name: true },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      displayName: true,
+      bio: true,
+      avatarSeed: true,
+      emailVerified: true,
+    },
   });
   if (!user) redirect("/login");
 
@@ -29,10 +40,46 @@ export default async function SettingsPage() {
             ({user.name})
           </>
         ) : null}
+        <span className="mx-1.5 text-[var(--dq-border)]">·</span>
+        <Link
+          href={`/profile/${user.id}`}
+          className="font-medium text-[var(--dq-primary)] underline decoration-[color-mix(in_srgb,var(--dq-gold)_35%,var(--dq-border))] underline-offset-[3px] transition hover:decoration-[var(--dq-gold)]"
+        >
+          View profile
+        </Link>
       </p>
-      <div className="mt-10">
+
+      {!user.emailVerified ? (
+        <section className="mt-8 rounded-[var(--dq-radius-lg)] border border-amber-200/80 bg-amber-50/90 p-5 text-amber-950 dark:border-amber-900 dark:bg-amber-950/50 dark:text-amber-100">
+          <p className="font-outfit text-sm font-semibold">
+            Your email is not verified.
+          </p>
+          <p className="mt-1 text-sm opacity-90">
+            You need to verify your email before you can contribute reflections.
+          </p>
+          <div className="mt-3">
+            <ResendVerificationButton />
+          </div>
+        </section>
+      ) : null}
+
+      <section className="mt-10">
+        <h2 className="font-display mb-5 text-lg font-semibold tracking-wide text-[var(--dq-ink)]">
+          Profile
+        </h2>
+        <ProfileEditForm
+          initialDisplayName={user.displayName ?? ""}
+          initialBio={user.bio ?? ""}
+          avatarSeed={user.avatarSeed}
+        />
+      </section>
+
+      <section className="mt-14 border-t border-[color-mix(in_srgb,var(--dq-border)_85%,var(--dq-gold)_15%)] pt-10">
+        <h2 className="font-display mb-5 text-lg font-semibold tracking-wide text-red-700 dark:text-red-400">
+          Danger zone
+        </h2>
         <DeleteAccountForm />
-      </div>
+      </section>
     </main>
   );
 }
