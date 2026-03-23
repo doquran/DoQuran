@@ -191,7 +191,11 @@ export function ContributeForm({ disabled = false }: { disabled?: boolean }) {
     }
   }
 
-  const canSubmit = verseList.length > 0 && parsed.ok;
+  const MIN_REFLECTION_LENGTH = 150;
+  const wordCount = reflection.trim().split(/\s+/).filter(Boolean).length;
+  const charCount = reflection.trim().length;
+  const reflectionLongEnough = charCount >= MIN_REFLECTION_LENGTH;
+  const canSubmit = verseList.length > 0 && parsed.ok && reflectionLongEnough;
 
   return (
     <form
@@ -335,9 +339,20 @@ export function ContributeForm({ disabled = false }: { disabled?: boolean }) {
           rows={12}
           value={reflection}
           onChange={(e) => setReflection(e.target.value)}
-          placeholder="Write what you want to share…"
+          placeholder="Write what you want to share… (minimum 150 characters)"
           className="dq-input min-h-[12rem] resize-y"
         />
+        <div className="mt-2 flex items-center justify-between text-[0.7rem] tabular-nums">
+          <span className={`font-medium ${reflectionLongEnough ? "text-[var(--dq-primary)]" : charCount > 0 ? "text-amber-600 dark:text-amber-400" : "text-[var(--dq-muted)]"}`}>
+            {charCount}/{MIN_REFLECTION_LENGTH} characters
+            {charCount > 0 && !reflectionLongEnough
+              ? ` · ${MIN_REFLECTION_LENGTH - charCount} more needed`
+              : ""}
+          </span>
+          <span className="text-[var(--dq-muted)]">
+            {wordCount} {wordCount === 1 ? "word" : "words"}
+          </span>
+        </div>
       </div>
       {error ? (
         <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/50 dark:text-red-200">

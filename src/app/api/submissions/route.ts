@@ -10,7 +10,7 @@ import { moderateContent } from "@/lib/moderation";
 
 const createSchema = z.object({
   versesRaw: z.string().min(1).max(4000),
-  reflection: z.string().min(1).max(65_000),
+  reflection: z.string().min(150, "Reflections must be at least 150 characters.").max(65_000),
   badgeSlugs: z.array(z.string()).max(12).optional(),
 });
 
