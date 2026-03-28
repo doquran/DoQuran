@@ -84,6 +84,45 @@ export default function AboutPage() {
         </ul>
 
         <h2 className="font-display !mt-10 text-xl font-semibold tracking-wide text-[var(--dq-ink)]">
+          How it started
+        </h2>
+
+        <p>
+          DoQuran began with a simple personal need: a place to write down my
+          understanding of each verse of the Qur&apos;an — and have it persist,
+          be accessible, and be mine. Not scattered across notebooks or buried in
+          chat threads, but structured, searchable, and always there when I
+          needed it.
+        </p>
+
+        <p>
+          Then I realised that if I wanted this, others must too. And if those
+          others happened to be physicians, engineers, data scientists, and
+          teachers, their reflections — viewed through the lens of their
+          expertise — would not only be valuable for them, but for anyone reading
+          the same verse. That is how a personal journal became a community
+          platform.
+        </p>
+
+        <h2 className="font-display !mt-10 text-xl font-semibold tracking-wide text-[var(--dq-ink)]">
+          Open source
+        </h2>
+
+        <p>
+          DoQuran is fully open source under the MIT License. The Qur&apos;an is
+          freely available to all humanity; a platform built around it should be
+          open in the same spirit. Developers, designers, and contributors are
+          welcome — see our{" "}
+          <a
+            href="https://github.com/YOUR_USERNAME/DoQuran"
+            className="font-medium text-[var(--dq-primary)] underline decoration-[color-mix(in_srgb,var(--dq-gold)_35%,var(--dq-border))] underline-offset-[3px] transition hover:decoration-[var(--dq-gold)]"
+          >
+            GitHub repository
+          </a>
+          .
+        </p>
+
+        <h2 className="font-display !mt-10 text-xl font-semibold tracking-wide text-[var(--dq-ink)]">
           Attribution
         </h2>
 

@@ -158,9 +158,10 @@ export default async function HomePage({ searchParams }: HomeProps) {
           <strong className="font-semibold text-[var(--dq-ink)]">
             your reflection
           </strong>
-          , tagged by lens: scientist, engineer, physician, educator, scholar.
-          Peers vote. The best work rises—no algorithmic fog, no paywall on
-          meaning.
+          : your personal reading of the verse through the lens of your life, your
+          work, your field. Not a fatwa, not a lecture—your honest engagement.
+          Tag it by perspective, and the community votes. The best thinking
+          rises.
         </p>
         <div className="font-outfit mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
@@ -191,6 +192,52 @@ export default async function HomePage({ searchParams }: HomeProps) {
       />
 
       <TalentPillars />
+
+      {/* Who reflects here? */}
+      <section className="mb-16 sm:mb-20">
+        <SectionTitle>Who reflects here?</SectionTitle>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[
+            {
+              icon: "🔬",
+              role: "Data Scientist",
+              example:
+                "\u201cI see information theory in this verse\u2014the precision of encoding in DNA mirrors the precision of divine speech.\u201d",
+            },
+            {
+              icon: "🩺",
+              role: "Physician",
+              example:
+                "\u201cThis verse about creation connects to what I observe in embryology\u2014stages described centuries before microscopy.\u201d",
+            },
+            {
+              icon: "⚙️",
+              role: "Engineer",
+              example:
+                "\u201cThe structural language in this verse reminds me of load-bearing design\u2014nothing superfluous, every word carries weight.\u201d",
+            },
+          ].map((card) => (
+            <div
+              key={card.role}
+              className="dq-card flex flex-col p-6 text-center"
+            >
+              <span className="text-3xl" aria-hidden>
+                {card.icon}
+              </span>
+              <p className="font-outfit mt-3 text-sm font-bold tracking-wide text-[var(--dq-ink)]">
+                {card.role}
+              </p>
+              <p className="font-display mt-3 flex-1 text-sm italic leading-[1.7] text-[var(--dq-muted)]">
+                {card.example}
+              </p>
+            </div>
+          ))}
+        </div>
+        <p className="font-outfit mt-6 text-center text-sm text-[var(--dq-muted)]">
+          Classical scholars, seekers, educators, and anyone who reads with
+          honest curiosity are equally welcome.
+        </p>
+      </section>
 
       {daily ? (
         <section className="dq-card relative mb-16 overflow-hidden sm:mb-20">
@@ -247,6 +294,14 @@ export default async function HomePage({ searchParams }: HomeProps) {
               >
                 Other verses
               </Link>
+              <a
+                href={`https://quran.com/${daily.surahNumber}:${daily.ayahInSurah}/tafsirs`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-outfit inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-[var(--dq-muted)] underline decoration-[var(--dq-border)] underline-offset-[3px] transition hover:text-[var(--dq-primary)] hover:decoration-[var(--dq-gold)]"
+              >
+                Classical tafsir on Quran.com ↗
+              </a>
             </div>
           </div>
         </section>

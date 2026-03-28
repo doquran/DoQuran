@@ -107,6 +107,16 @@ export default async function SubmissionPage({ params }: PageProps) {
             <p className="font-mono text-xl font-semibold tracking-wide text-[var(--dq-ink)] sm:text-2xl">
               {refs}
             </p>
+            {s.verses.length > 0 ? (
+              <a
+                href={`https://quran.com/${s.verses[0].surah}:${s.verses[0].ayah}/tafsirs`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-outfit mt-2 inline-flex text-xs font-medium tracking-wide text-[var(--dq-muted)] underline decoration-[var(--dq-border)] underline-offset-[3px] transition hover:text-[var(--dq-primary)] hover:decoration-[var(--dq-gold)]"
+              >
+                Read classical tafsir on Quran.com ↗
+              </a>
+            ) : null}
             <p className="mt-4 text-sm tracking-wide text-[var(--dq-muted)]">
               <span className="font-medium text-[var(--dq-ink)]">{author}</span>
               <span className="mx-2 text-[var(--dq-border)]">·</span>
