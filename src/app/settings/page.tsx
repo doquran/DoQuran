@@ -69,7 +69,7 @@ export default async function SettingsPage() {
           Profile
         </h2>
         <ProfileEditForm
-          initialDisplayName={user.displayName ?? ""}
+          initialDisplayName={user.displayName ?? user.name ?? ""}
           initialBio={user.bio ?? ""}
           avatarSeed={user.avatarSeed}
         />
