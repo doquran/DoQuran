@@ -114,7 +114,7 @@ export default function AboutPage() {
           open in the same spirit. Developers, designers, and contributors are
           welcome — see our{" "}
           <a
-            href="https://github.com/YOUR_USERNAME/DoQuran"
+            href="https://github.com/doquran/DoQuran"
             className="font-medium text-[var(--dq-primary)] underline decoration-[color-mix(in_srgb,var(--dq-gold)_35%,var(--dq-border))] underline-offset-[3px] transition hover:decoration-[var(--dq-gold)]"
           >
             GitHub repository

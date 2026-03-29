@@ -2,10 +2,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// PRODUCTION: use "postgresql" with a Neon connection string
-// LOCAL DEV: use "sqlite" with DATABASE_URL="file:./dev.db"
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

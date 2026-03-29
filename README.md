@@ -32,7 +32,7 @@ One verse a day — Arabic and English — then your reflection, tagged by lens:
 ## Quick start
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/DoQuran.git
+git clone https://github.com/doquran/DoQuran.git
 cd DoQuran
 cp .env.example .env
 ```
